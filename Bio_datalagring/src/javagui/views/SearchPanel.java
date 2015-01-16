@@ -31,10 +31,19 @@ import java.awt.GridLayout;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.SpringLayout;
+
+import ODBC.ODBCHandler;
+import ODBC.dataStructure.CityTable;
+
 import java.awt.Insets;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+import java.util.ArrayList;
 
 public class SearchPanel extends JPanel {
 
+	ODBCHandler ODBC = new ODBCHandler();
+	
 	/**
 	 * Create the panel.
 	 */
@@ -70,7 +79,28 @@ public class SearchPanel extends JPanel {
         add(lblCity, gbc_lblCity);
         
         JComboBox comboBox = new JComboBox();
+        comboBox.addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent e) {
+        		
+        		// TODO getTheathers in city
+        		//TODO GetMovies Show in city
+        		
+        		
+        		
+        	}
+        });
+        
         comboBox.setModel(new DefaultComboBoxModel(new String[] {"Stockholm", "Malm\u00F6"}));
+        try {
+        	
+			ArrayList<CityTable> cityTable= ODBC.GetCitys();
+			String[] cityNames = new String[cityTable.size()];
+			for (int i = 0; i < cityTable.size(); i++) {
+				cityNames[i]  = cityTable.get(i).cityName;
+			}
+			 comboBox.setModel(new DefaultComboBoxModel(cityNames));
+		} catch (Exception e1) {	e1.printStackTrace();	}
+       
         comboBox.setSelectedIndex(1);
         GridBagConstraints gbc_comboBox = new GridBagConstraints();
         gbc_comboBox.insets = new Insets(0, 0, 5, 5);
