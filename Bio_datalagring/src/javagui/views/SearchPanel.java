@@ -43,7 +43,8 @@ import java.util.ArrayList;
 public class SearchPanel extends JPanel {
 
 	ODBCHandler ODBC = new ODBCHandler();
-	
+	JComboBox comboBox_1 = new JComboBox();
+	 JComboBox comboBox_2 = new JComboBox();
 	/**
 	 * Create the panel.
 	 */
@@ -82,10 +83,19 @@ public class SearchPanel extends JPanel {
         comboBox.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
         		
-        		// TODO getTheathers in city
-        		//TODO GetMovies Show in city
+        		// getTheathers in city
+        		JComboBox cb = (JComboBox)e.getSource();
+        		 String CityName = (String)cb.getSelectedItem();
+        		 try {
+        			 
+					ArrayList<String> res = ODBC.getCinemasInCity(CityName);
+					comboBox_1.setModel(new DefaultComboBoxModel(res.toArray()));
+					
+					ArrayList<String> moviesInTown = ODBC.getMoviesInCity(CityName);
+					comboBox_2.setModel(new DefaultComboBoxModel(moviesInTown.toArray()));
+				} catch (Exception e1) {	e1.printStackTrace();}
         		
-        		
+        		 
         		
         	}
         });
@@ -117,7 +127,7 @@ public class SearchPanel extends JPanel {
         gbc_lblTheather.gridy = 2;
         add(lblTheather, gbc_lblTheather);
         
-        JComboBox comboBox_1 = new JComboBox();
+        
         comboBox_1.setModel(new DefaultComboBoxModel(new String[] {"Rigoletto"}));
         GridBagConstraints gbc_comboBox_1 = new GridBagConstraints();
         gbc_comboBox_1.insets = new Insets(0, 0, 5, 5);
@@ -141,7 +151,7 @@ public class SearchPanel extends JPanel {
         gbc_lblMovie.gridy = 2;
         add(lblMovie, gbc_lblMovie);
         
-        JComboBox comboBox_2 = new JComboBox();
+       
         comboBox_2.setModel(new DefaultComboBoxModel(new String[] {"The Hobbit"}));
         GridBagConstraints gbc_comboBox_2 = new GridBagConstraints();
         gbc_comboBox_2.insets = new Insets(0, 0, 5, 0);

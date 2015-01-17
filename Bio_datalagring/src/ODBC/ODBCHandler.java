@@ -144,15 +144,55 @@ public class ODBCHandler {
 		// Execute the SQL statement that is prepared in the variable stmt
 		// and store the result in the variable rs.
 		rs = stmt.executeUpdate();
-		
+
 		stmt.close();
-		
+
 		if (rs == 1) {
 			return GetCityID(stad);
 		} else {
 			return 0;
 		}
 
+	}
+
+	public ArrayList<String> getCinemasInCity(String city) throws Exception {
+
+		connect();
+
+		int cityID = GetCityID(city);
+
+		String query;
+		ResultSet rs;
+		PreparedStatement stmt;
+
+		// Set the SQL statement into the query variable
+		query = "SELECT Biograf.Namn FROM Biograf WHERE Biograf.Stad=?";
+
+		// Create a statement associated to the connection and the query.
+		// The new statement is placed in the variable stmt.
+		stmt = con.prepareStatement(query);
+
+		// Provide the value for the first ? in the SQL statement.
+		// The value of the variable markeparam will be sent to the database
+		// manager
+		// through the variables stmt and con.
+		stmt.setInt(1, cityID);
+
+		// Execute the SQL statement that is prepared in the variable stmt
+		// and store the result in the variable rs.
+		rs = stmt.executeQuery();
+		// should only exist one!
+		ArrayList<String> ret = new ArrayList<String>();
+
+		while (rs.next()) {
+			ret.add(rs.getString("Namn"));
+		}
+
+		// Close the variable stmt and release all resources bound to it
+		// Any ResultSet associated to the Statement will be automatically
+		// closed too.
+		stmt.close();
+		return ret;
 	}
 
 	public int GetCityID(String Stad) throws Exception {
@@ -235,9 +275,9 @@ public class ODBCHandler {
 		ResultSet rs;
 		PreparedStatement stmt;
 		ArrayList<CinemaTable> answer = new ArrayList<CinemaTable>();
-		
+
 		connect();
-		
+
 		// Set the SQL statement into the query variable
 		query = "SELECT * FROM Biograf WHERE Stad = ? ";
 
@@ -268,7 +308,7 @@ public class ODBCHandler {
 		}
 
 		stmt.close();
-		
+
 		return answer;
 	}
 
@@ -280,6 +320,43 @@ public class ODBCHandler {
 			e.printStackTrace();
 		}
 
+	}
+
+	public ArrayList<String> getMoviesInCity(String cityName) throws Exception {
+
+		String query;
+		ResultSet rs;
+		PreparedStatement stmt;
+
+		// Set the SQL statement into the query variable
+		query = "SELECT Film.Titel FROM Film Where Film.FilmID IN (select Föreställning.Film FROM ((Föreställning INNER JOIN Salong ON Föreställning.Salong=Salong.SalongsID ) INNER JOIN Biograf ON  Salong.Biograf=Biograf.BiografID) INNER JOIN  Stad on Biograf.Stad=Stad.StadID WHERE Stad.Namn=? AND (0 >  DATEDIFF('d',Föreställning.Starttid,Now())) )";    
+
+		// Create a statement associated to the connection and the query.
+		// The new statement is placed in the variable stmt.
+		stmt = con.prepareStatement(query);
+
+		// Provide the value for the first ? in the SQL statement.
+		// The value of the variable markeparam will be sent to the database
+		// manager
+		// through the variables stmt and con.
+		stmt.setString(1, cityName);
+
+		// Execute the SQL statement that is prepared in the variable stmt
+		// and store the result in the variable rs.
+		rs = stmt.executeQuery();
+		// should only exist one!
+		ArrayList<String> ret = new ArrayList<String>();
+
+		while (rs.next()) {
+			ret.add(rs.getString("Titel"));
+		}
+
+		// Close the variable stmt and release all resources bound to it
+		// Any ResultSet associated to the Statement will be automatically
+		// closed too.
+		stmt.close();
+
+		return ret;
 	}
 
 }
