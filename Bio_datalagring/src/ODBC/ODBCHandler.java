@@ -1,5 +1,11 @@
 package ODBC;
 
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.InputStream;
+import java.io.ObjectInputStream;
+import java.sql.Blob;
+import java.sql.Clob;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -8,8 +14,11 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 
+import javax.imageio.ImageIO;
+
 import ODBC.dataStructure.CinemaTable;
 import ODBC.dataStructure.CityTable;
+import ODBC.dataStructure.MovieInfo;
 
 public class ODBCHandler {
 
@@ -357,6 +366,53 @@ public class ODBCHandler {
 		stmt.close();
 
 		return ret;
+	}
+
+	public MovieInfo getMovieInfo(String movieTitle) throws Exception {
+		
+		String query;
+		ResultSet rs;
+		PreparedStatement stmt;
+
+		// Set the SQL statement into the query variable
+		query = "SELECT Titel, Grundpris, Beskrivning, Bild, Längd FROM Film WHERE Titel=? ";    
+
+		// Create a statement associated to the connection and the query.
+		// The new statement is placed in the variable stmt.
+		stmt = con.prepareStatement(query);
+
+		// Provide the value for the first ? in the SQL statement.
+		// The value of the variable markeparam will be sent to the database
+		// manager
+		// through the variables stmt and con.
+		stmt.setString(1, movieTitle);
+
+		// Execute the SQL statement that is prepared in the variable stmt
+		// and store the result in the variable rs.
+		rs = stmt.executeQuery();
+		// should only exist one!
+		MovieInfo ret = new MovieInfo();
+		
+		if (rs.next()) {
+			
+			ret.Titel = rs.getString("Titel");
+			ret.Price = rs.getBigDecimal("Grundpris") ;
+			ret.Description = rs.getString("Beskrivning");
+			ret.Lenght = rs.getInt("Längd");
+			
+			 
+		}
+		
+
+		 
+		// Close the variable stmt and release all resources bound to it
+		// Any ResultSet associated to the Statement will be automatically
+		// closed too.
+		stmt.close();
+
+		return ret;
+		
+		
 	}
 
 }

@@ -30,6 +30,11 @@ public class MovieInfoPanel extends JPanel {
 	/**
 	 * Create the panel.
 	 */
+	static JLabel posterpanel;
+	static JLabel lblMovietitel;
+	static JLabel lblNewLabel;
+	static JTextArea txtrWhenTonyStark;
+	
 	public MovieInfoPanel() {
 		
 		GridBagLayout gridBagLayout = new GridBagLayout();
@@ -55,7 +60,7 @@ public class MovieInfoPanel extends JPanel {
 		gbc_descriptionholder.gridy = 0;
 		add(posterpanel, gbc_descriptionholder);
 		
-		JLabel lblMovietitel = new JLabel("Movie_Titel");
+		 lblMovietitel = new JLabel("Movie_Titel");
 		GridBagConstraints gbc_lblMovietitel = new GridBagConstraints();
 		gbc_lblMovietitel.anchor = GridBagConstraints.WEST;
 		gbc_lblMovietitel.insets = new Insets(0, 0, 5, 0);
@@ -63,7 +68,7 @@ public class MovieInfoPanel extends JPanel {
 		gbc_lblMovietitel.gridy = 0;
 		add(lblMovietitel, gbc_lblMovietitel);
 		
-		JLabel lblNewLabel = new JLabel("Lenght: ");
+		 lblNewLabel = new JLabel("Lenght: ");
 		GridBagConstraints gbc_lblNewLabel = new GridBagConstraints();
 		gbc_lblNewLabel.anchor = GridBagConstraints.WEST;
 		gbc_lblNewLabel.insets = new Insets(0, 0, 5, 0);
@@ -71,7 +76,7 @@ public class MovieInfoPanel extends JPanel {
 		gbc_lblNewLabel.gridy = 1;
 		add(lblNewLabel, gbc_lblNewLabel);
 		
-		JTextArea txtrWhenTonyStark = new JTextArea();
+		txtrWhenTonyStark = new JTextArea();
 		txtrWhenTonyStark.setPreferredSize(new Dimension(300, 100));
 		txtrWhenTonyStark.setLineWrap(true);
 		txtrWhenTonyStark.setWrapStyleWord(true);
@@ -85,9 +90,8 @@ public class MovieInfoPanel extends JPanel {
 		gbc_txtrWhenTonyStark.gridy = 2;
 		add(txtrWhenTonyStark, gbc_txtrWhenTonyStark);
 		
-		
-
-
-
 	}
+	
+	
+	
 }
