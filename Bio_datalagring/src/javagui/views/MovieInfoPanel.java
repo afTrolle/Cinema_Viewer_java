@@ -90,6 +90,7 @@ public class MovieInfoPanel extends JPanel {
 		gbc_txtrWhenTonyStark.gridy = 2;
 		add(txtrWhenTonyStark, gbc_txtrWhenTonyStark);
 		
+		
 	}
 	
 	
