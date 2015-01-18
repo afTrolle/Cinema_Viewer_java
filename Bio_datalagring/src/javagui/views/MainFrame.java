@@ -36,6 +36,16 @@ public class MainFrame extends JFrame {
 		//Get the Cinema Movie Finder View menuItem
 		JMenuItem mnFindMovie = new JMenuItem("Find movie");
 		mnFile.add(mnFindMovie);
+		mnFindMovie.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				//set MovieFinder To main
+				CinemaBrowserPanel Bodypanel = new CinemaBrowserPanel();
+				setContentPane(Bodypanel);
+				pack();
+			}
+		});
 		
 		//Close menu Item another way to close the program for the user
 		JMenuItem mnClose = new JMenuItem("Close");
@@ -65,12 +75,23 @@ public class MainFrame extends JFrame {
 		
 		//Menu Item allows user to see all theaters inside a city 
 		JMenuItem mntmView = new JMenuItem("View theathers");
+		mntmView.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+			
+				CitysPanel Bodypanel = new CitysPanel();
+				setContentPane(Bodypanel);
+				pack();
+				
+			}
+		});
 		mnAdminTab.add(mntmView);
 		
 		//Starts the program in to cinema browser / finder.
 		CinemaBrowserPanel Bodypanel = new CinemaBrowserPanel();
 		setContentPane(Bodypanel);
-		
+		pack();
 	}
 
 }
