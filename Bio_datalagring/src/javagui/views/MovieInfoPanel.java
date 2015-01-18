@@ -24,13 +24,13 @@ import java.awt.BorderLayout;
 import javax.swing.BoxLayout;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
+import java.awt.Font;
 
 public class MovieInfoPanel extends JPanel {
 
 	/**
 	 * Create the panel.
 	 */
-	static JLabel posterpanel;
 	static JLabel lblMovietitel;
 	static JLabel lblNewLabel;
 	static JTextArea txtrWhenTonyStark;
@@ -40,25 +40,9 @@ public class MovieInfoPanel extends JPanel {
 		GridBagLayout gridBagLayout = new GridBagLayout();
 		gridBagLayout.columnWidths = new int[]{0, 0, 0};
 		gridBagLayout.rowHeights = new int[]{0, 0, 0, 0, 0};
-		gridBagLayout.columnWeights = new double[]{0.0, 0.0, Double.MIN_VALUE};
+		gridBagLayout.columnWeights = new double[]{0.0, 1.0, Double.MIN_VALUE};
 		gridBagLayout.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
 		setLayout(gridBagLayout);
-		
-		
-		ImageIcon icon= null;
-		try {
-			BufferedImage img = ImageIO.read(new File("res/test.jpg"));
-	        icon = new ImageIcon( img.getScaledInstance(img.getWidth()/2, img.getHeight()/2, Image.SCALE_SMOOTH));
-		} catch (IOException e) {		}
-		JLabel posterpanel = new JLabel(icon);
-		posterpanel.setBackground(Color.black);
-		GridBagConstraints gbc_descriptionholder = new GridBagConstraints();
-		gbc_descriptionholder.gridheight = 4;
-		gbc_descriptionholder.insets = new Insets(0, 0, 0, 5);
-		gbc_descriptionholder.fill = GridBagConstraints.BOTH;
-		gbc_descriptionholder.gridx = 0;
-		gbc_descriptionholder.gridy = 0;
-		add(posterpanel, gbc_descriptionholder);
 		
 		 lblMovietitel = new JLabel("Movie_Titel");
 		GridBagConstraints gbc_lblMovietitel = new GridBagConstraints();
@@ -77,6 +61,8 @@ public class MovieInfoPanel extends JPanel {
 		add(lblNewLabel, gbc_lblNewLabel);
 		
 		txtrWhenTonyStark = new JTextArea();
+		txtrWhenTonyStark.setFont(new Font("Monospaced", Font.PLAIN, 12));
+		txtrWhenTonyStark.setRows(6);
 		txtrWhenTonyStark.setPreferredSize(new Dimension(300, 100));
 		txtrWhenTonyStark.setLineWrap(true);
 		txtrWhenTonyStark.setWrapStyleWord(true);

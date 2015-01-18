@@ -73,27 +73,9 @@ public class MainFrame extends JFrame {
 		
 		JMenuItem mntmView = new JMenuItem("View theathers");
 		mnNewMenu_1.add(mntmView);
-		contentPane = new JPanel();
-		contentPane.setBorder(null);
-		
-		setContentPane(contentPane);
-		GridBagLayout gbl_contentPane = new GridBagLayout();
-		gbl_contentPane.columnWidths = new int[]{1062, 0};
-		gbl_contentPane.rowHeights = new int[]{418, 0};
-		gbl_contentPane.columnWeights = new double[]{1.0, Double.MIN_VALUE};
-		gbl_contentPane.rowWeights = new double[]{1.0, Double.MIN_VALUE};
-		contentPane.setLayout(gbl_contentPane);
 		
 		SearchReslut panel = new SearchReslut();
-		GridBagConstraints gbc_panel = new GridBagConstraints();
-		gbc_panel.anchor = GridBagConstraints.NORTH;
-		gbc_panel.fill = GridBagConstraints.BOTH;
-		gbc_panel.gridx = 0;
-		gbc_panel.gridy = 0;
-		contentPane.add(panel, gbc_panel);
-
-		
-		
+		setContentPane(panel);
 	}
 
 }
