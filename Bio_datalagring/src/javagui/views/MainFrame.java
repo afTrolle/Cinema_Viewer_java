@@ -1,81 +1,66 @@
 package javagui.views;
 
 
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.EventQueue;
+import java.awt.Dimension;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.border.EmptyBorder;
-import javax.swing.JDesktopPane;
-import javax.swing.JToolBar;
-
-import java.awt.FlowLayout;
-
-import javax.swing.BoxLayout;
-
-import java.awt.Component;
-import java.awt.Dimension;
-import java.awt.GridBagLayout;
-import java.awt.GridBagConstraints;
-import java.awt.Insets;
-import javax.swing.JLabel;
-import javax.swing.JButton;
-import javax.swing.JMenuBar;
-import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JMenu;
+import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
-import java.awt.GridLayout;
-import javax.swing.SwingConstants;
-import javax.swing.JTextField;
-import javax.swing.JTextPane;
-import javax.swing.JComboBox;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
 
+@SuppressWarnings("serial")
 public class MainFrame extends JFrame {
 
-	final int  windowWidth = 1068;
-	final int  windowHeight = 614;
-	
-	private JPanel contentPane;
-
 	/**
-	 * Create the frame.
+	 * Creates Main ProgramFrame
 	 */
 	public MainFrame() {
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, windowWidth, windowHeight);
 		
+		// Setting up the JFrame
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setBounds(100, 100, 900, 600);
+		setMinimumSize(new Dimension(900, 600));
+		
+		// Setting up menu
 		JMenuBar menuBar = new JMenuBar();
 		setJMenuBar(menuBar);
 		
-		JMenu mnNewMenu = new JMenu("File");
-		menuBar.add(mnNewMenu);
+		// main tab on menu
+		JMenu mnFile = new JMenu("File");
+		menuBar.add(mnFile);
 		
-		JMenuItem mntmNewMenuItem = new JMenuItem("Find  Movie");
-		mnNewMenu.add(mntmNewMenuItem);
+		//Get the Cinema Movie Finder View menuItem
+		JMenuItem mnFindMovie = new JMenuItem("Find movie");
+		mnFile.add(mnFindMovie);
 		
-		JMenuItem mntmNewMenuItem_1 = new JMenuItem("Close");
-		mntmNewMenuItem_1.addActionListener(new ActionListener() {
+		//Close menu Item another way to close the program for the user
+		JMenuItem mnClose = new JMenuItem("Close");
+		//Add ActionListener another way too close the program.
+		mnClose.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				System.exit(0);
 			}
 		});
-		mnNewMenu.add(mntmNewMenuItem_1);
+		mnFile.add(mnClose);
 		
-		JMenu mnNewMenu_1 = new JMenu("Administration");
-		menuBar.add(mnNewMenu_1);
+		//Administration Tab for Administration Functions
+		JMenu mnAdminTab = new JMenu("Administration");
+		menuBar.add(mnAdminTab);
+
+		//Create theather menu item clicked when the user wants to create a new theater
+		JMenuItem mnCreateTheater = new JMenuItem("Create theather");
+		mnAdminTab.add(mnCreateTheater);
 		
-		JMenuItem mntmNewMenuItem_2 = new JMenuItem("CreateTheather");
-		mnNewMenu_1.add(mntmNewMenuItem_2);
-		
+		//Menu Item allows user to see all theaters inside a city 
 		JMenuItem mntmView = new JMenuItem("View theathers");
-		mnNewMenu_1.add(mntmView);
+		mnAdminTab.add(mntmView);
 		
-		SearchReslut panel = new SearchReslut();
-		setContentPane(panel);
+		//Starts the program in to cinema browser / finder.
+		CinemaBrowserPanel Bodypanel = new CinemaBrowserPanel();
+		setContentPane(Bodypanel);
+		
 	}
 
 }

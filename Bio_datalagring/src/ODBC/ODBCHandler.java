@@ -1,11 +1,5 @@
 package ODBC;
 
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.InputStream;
-import java.io.ObjectInputStream;
-import java.sql.Blob;
-import java.sql.Clob;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -13,10 +7,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.Date;
-
-import javax.imageio.ImageIO;
-import javax.swing.JComboBox;
 
 import ODBC.dataStructure.CinemaTable;
 import ODBC.dataStructure.CityTable;
