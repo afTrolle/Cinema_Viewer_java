@@ -10,6 +10,8 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 
+import administration.CreateCinemaDialog;
+
 @SuppressWarnings("serial")
 public class MainFrame extends JFrame {
 
@@ -52,6 +54,14 @@ public class MainFrame extends JFrame {
 		//Create theather menu item clicked when the user wants to create a new theater
 		JMenuItem mnCreateTheater = new JMenuItem("Create theather");
 		mnAdminTab.add(mnCreateTheater);
+		mnCreateTheater.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				CreateCinemaDialog cinema = new CreateCinemaDialog();
+			}
+		});
+		
 		
 		//Menu Item allows user to see all theaters inside a city 
 		JMenuItem mntmView = new JMenuItem("View theathers");
