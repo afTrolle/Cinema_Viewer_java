@@ -23,12 +23,15 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
+import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
 import javax.swing.JList;
 import javax.swing.AbstractListModel;
 import javax.swing.ListSelectionModel;
 import javax.swing.SwingConstants;
+
 import java.awt.FlowLayout;
+
 import javax.swing.BoxLayout;
 
 public class SearchReslut extends JPanel {
@@ -36,6 +39,8 @@ public class SearchReslut extends JPanel {
 	final int  windowWidth = 1068;
 	final int  windowHeight = 614;
 
+	static JList showsList = new JList();
+	public static DefaultListModel model = new DefaultListModel();
 	/**
 	 * Create the panel.
 	 */
@@ -83,48 +88,28 @@ public class SearchReslut extends JPanel {
 		
 		JPanel timeandmoviePanel = new JPanel();
 		GridBagConstraints gbc_timeandmoviePanel = new GridBagConstraints();
+		gbc_timeandmoviePanel.gridwidth = 2;
 		gbc_timeandmoviePanel.insets = new Insets(0, 0, 0, 5);
 		gbc_timeandmoviePanel.fill = GridBagConstraints.BOTH;
 		gbc_timeandmoviePanel.gridx = 0;
-		gbc_timeandmoviePanel.gridy = 1;
+		gbc_timeandmoviePanel.gridy = 2;
 		gbc_timeandmoviePanel.gridheight = 3;
 		add(timeandmoviePanel, gbc_timeandmoviePanel);
 		
-		JList list = new JList();
-		list.setBackground(null);
-		list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		list.setLayoutOrientation(JList.VERTICAL_WRAP);
-		list.setModel(new AbstractListModel() {
-			String[] values = new String[] {"hobbit", "no sprite"};
-			public int getSize() {
-				return values.length;
-			}
-			public Object getElementAt(int index) {
-				return values[index];
-			}
-		});
+		JList showsList = new JList();
+		showsList.setBackground(null);
+		showsList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		showsList.setLayoutOrientation(JList.VERTICAL_WRAP);
+		
+		showsList.setModel(model);
 		
 		CompoundBorder moviesborder = new CompoundBorder(new TitledBorder("Available movies"), new EmptyBorder(4, 4, 4, 4));
 		timeandmoviePanel.setLayout(new BorderLayout(0, 0));
-		list.setBorder(new CompoundBorder(new EmptyBorder(5, 5, 5, 5),moviesborder));
+		showsList.setBorder(new CompoundBorder(new EmptyBorder(5, 5, 5, 5),moviesborder));
 		
-		timeandmoviePanel.add(list, BorderLayout.CENTER);
-		
-		JPanel searchResultPanel = new JPanel();
-		GridBagConstraints gbc_searchResultPanel = new GridBagConstraints();
-		gbc_searchResultPanel.anchor = GridBagConstraints.NORTH;
-		gbc_searchResultPanel.insets = new Insets(0, 0, 5, 0);
-		gbc_searchResultPanel.fill = GridBagConstraints.HORIZONTAL;
-		gbc_searchResultPanel.gridx = 1;
-		gbc_searchResultPanel.gridy = 2;
-		add(searchResultPanel, gbc_searchResultPanel);
-		searchResultPanel.setLayout(new BoxLayout(searchResultPanel, BoxLayout.Y_AXIS));
+		timeandmoviePanel.add(showsList, BorderLayout.CENTER);
 		
 		CompoundBorder movieOccasionborder = new CompoundBorder(new TitledBorder("Available Dates"), new EmptyBorder(4, 4, 4, 4));
-		searchResultPanel.setBorder(new CompoundBorder(new EmptyBorder(5, 5, 5, 5),movieOccasionborder));
-		
-		ResultLinePanel p1 = new ResultLinePanel();
-		searchResultPanel.add(p1);
 		
 	}
 	

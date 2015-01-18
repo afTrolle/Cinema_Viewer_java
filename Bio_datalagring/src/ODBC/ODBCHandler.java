@@ -13,12 +13,15 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Date;
 
 import javax.imageio.ImageIO;
+import javax.swing.JComboBox;
 
 import ODBC.dataStructure.CinemaTable;
 import ODBC.dataStructure.CityTable;
 import ODBC.dataStructure.MovieInfo;
+import ODBC.dataStructure.ShowTime;
 
 public class ODBCHandler {
 
@@ -338,7 +341,7 @@ public class ODBCHandler {
 		PreparedStatement stmt;
 
 		// Set the SQL statement into the query variable
-		query = "SELECT Film.Titel FROM Film Where Film.FilmID IN (select Föreställning.Film FROM ((Föreställning INNER JOIN Salong ON Föreställning.Salong=Salong.SalongsID ) INNER JOIN Biograf ON  Salong.Biograf=Biograf.BiografID) INNER JOIN  Stad on Biograf.Stad=Stad.StadID WHERE Stad.Namn=? AND (0 >  DATEDIFF('d',Föreställning.Starttid,Now())) )";    
+		query = "SELECT Film.Titel FROM Film Where Film.FilmID IN (select Föreställning.Film FROM ((Föreställning INNER JOIN Salong ON Föreställning.Salong=Salong.SalongsID ) INNER JOIN Biograf ON  Salong.Biograf=Biograf.BiografID) INNER JOIN  Stad on Biograf.Stad=Stad.StadID WHERE Stad.Namn=? AND (0 >  DATEDIFF('d',Föreställning.Starttid,Now())) )";
 
 		// Create a statement associated to the connection and the query.
 		// The new statement is placed in the variable stmt.
@@ -369,13 +372,13 @@ public class ODBCHandler {
 	}
 
 	public MovieInfo getMovieInfo(String movieTitle) throws Exception {
-		
+
 		String query;
 		ResultSet rs;
 		PreparedStatement stmt;
 
 		// Set the SQL statement into the query variable
-		query = "SELECT Titel, Grundpris, Beskrivning, Bild, Längd FROM Film WHERE Titel=? ";    
+		query = "SELECT Titel, Grundpris, Beskrivning, Bild, Längd FROM Film WHERE Titel=? ";
 
 		// Create a statement associated to the connection and the query.
 		// The new statement is placed in the variable stmt.
@@ -392,27 +395,161 @@ public class ODBCHandler {
 		rs = stmt.executeQuery();
 		// should only exist one!
 		MovieInfo ret = new MovieInfo();
-		
+
 		if (rs.next()) {
-			
+
 			ret.Titel = rs.getString("Titel");
-			ret.Price = rs.getBigDecimal("Grundpris") ;
+			ret.Price = rs.getBigDecimal("Grundpris");
 			ret.Description = rs.getString("Beskrivning");
 			ret.Lenght = rs.getInt("Längd");
-			
-			 
-		}
-		
 
-		 
+		}
+
 		// Close the variable stmt and release all resources bound to it
 		// Any ResultSet associated to the Statement will be automatically
 		// closed too.
 		stmt.close();
 
 		return ret;
-		
-		
+
 	}
 
+	public ArrayList<String> getAvailableDatesCityAndMovie(String movieTitle, String city) throws Exception {
+
+		String query;
+		ResultSet rs;
+		PreparedStatement stmt;
+
+		// Set the SQL statement into the query variable
+		query = "SELECT DISTINCT Format(Föreställning.Starttid,'ddd/dd/mm') FROM "
+				+ "(((Föreställning  INNER JOIN Film ON Film.FilmID=Föreställning.Film)"
+				+ "INNER JOIN Salong ON Salong.SalongsID=Föreställning.Salong)"
+				+ "INNER JOIN Biograf ON Biograf.BiografID=Salong.Biograf)"
+				+ "INNER JOIN Stad ON Stad.StadID=Biograf.Stad"
+				+ " WHERE Stad.Namn=? AND   (0 >  DATEDIFF('d',Föreställning.Starttid,Now())) AND Film.Titel=?";
+
+		// Create a statement associated to the connection and the query.
+		// The new statement is placed in the variable stmt.
+		stmt = con.prepareStatement(query);
+
+		// Provide the value for the first ? in the SQL statement.
+		// The value of the variable markeparam will be sent to the database
+		// manager
+		// through the variables stmt and con.
+		stmt.setString(1, city);
+		stmt.setString(2, movieTitle);
+		// Execute the SQL statement that is prepared in the variable stmt
+		// and store the result in the variable rs.
+		rs = stmt.executeQuery();
+		// should only exist one!
+
+		ArrayList<String> ret = new ArrayList<String>();
+		while (rs.next()) {
+			ret.add(rs.getString(1));
+		}
+
+		// Close the variable stmt and release all resources bound to it
+		// Any ResultSet associated to the Statement will be automatically
+		// closed too.
+		stmt.close();
+
+		return ret;
+
+	}
+
+	public ArrayList<String> getAvailableDatesAtCinema(String cinemaName) throws SQLException {
+		
+		String query;
+		ResultSet rs;
+		PreparedStatement stmt;
+
+		// Set the SQL statement into the query variable
+		query = "SELECT DISTINCT Format(Föreställning.Starttid,'ddd/dd/mm') FROM "
+				+ "(((Föreställning  INNER JOIN Film ON Film.FilmID=Föreställning.Film)"
+				+ "INNER JOIN Salong ON Salong.SalongsID=Föreställning.Salong)"
+				+ "INNER JOIN Biograf ON Biograf.BiografID=Salong.Biograf)"
+				+ "INNER JOIN Stad ON Stad.StadID=Biograf.Stad"
+				+ " WHERE Biograf.Namn=? AND   (0 >  DATEDIFF('d',Föreställning.Starttid,Now())) ";
+
+		// Create a statement associated to the connection and the query.
+		// The new statement is placed in the variable stmt.
+		stmt = con.prepareStatement(query);
+
+		// Provide the value for the first ? in the SQL statement.
+		// The value of the variable markeparam will be sent to the database
+		// manager
+		// through the variables stmt and con.
+		stmt.setString(1, cinemaName);
+		// Execute the SQL statement that is prepared in the variable stmt
+		// and store the result in the variable rs.
+		rs = stmt.executeQuery();
+		// should only exist one!
+
+		ArrayList<String> ret = new ArrayList<String>();
+		while (rs.next()) {
+			ret.add(rs.getString(1));
+		}
+
+		// Close the variable stmt and release all resources bound to it
+		// Any ResultSet associated to the Statement will be automatically
+		// closed too.
+		stmt.close();
+
+		return ret;
+	}
+
+	public ArrayList<ShowTime> getShows(String Cinema, String date) throws SQLException {
+		
+		String query;
+		ResultSet rs;
+		PreparedStatement stmt;
+
+		// Set the SQL statement into the query variable
+		query = "SELECT * FROM (SELECT "
+				+ "Format(Föreställning.Starttid,'ddd/dd/mm') as Check, "
+				+ "Film.Titel , Film.Längd, Film.Grundpris , Film.Beskrivning , "
+				+ "Biograf.Namn , Salong.Namn, "
+				+ "Format(Föreställning.Starttid,'hh:mm') as start "
+				+ "FROM (((Föreställning INNER JOIN Film ON Film.FilmID=Föreställning.Film) "
+				+ "INNER JOIN Salong ON Salong.SalongsID=Föreställning.Salong) "
+				+ "INNER JOIN Biograf ON Biograf.BiografID=Salong.Biograf) "
+				+ "INNER JOIN Stad ON Stad.StadID=Biograf.Stad "
+				+ "WHERE (0>DATEDIFF('d',Föreställning.Starttid,Now()))) WHERE Check=?" ;
+
+		// Create a statement associated to the connection and the query.
+		// The new statement is placed in the variable stmt.
+		stmt = con.prepareStatement(query);
+
+		// Provide the value for the first ? in the SQL statement.
+		// The value of the variable markeparam will be sent to the database
+		// manager
+		// through the variables stmt and con.
+		stmt.setString(1, Cinema);
+		stmt.setString(1, date);
+		// Execute the SQL statement that is prepared in the variable stmt
+		// and store the result in the variable rs.
+		rs = stmt.executeQuery();
+		// should only exist one!
+
+		ArrayList<ShowTime> ret = new ArrayList<ShowTime>();
+		while (rs.next()) {
+			// Film.Titel-2 Film.Längd-3 Film.Grundpris-4 Film.Beskrivning-5 Biograf.Namn-6 Salong.Namn-7 Format(Föreställning.Starttid,'hh:mm')-8
+			ShowTime show = new ShowTime();
+			show.movieTitle = rs.getString(2);
+			show.movieLenght = rs.getInt(3);
+			show.moviePrice = rs.getBigDecimal(4);
+			show.movieDescription = rs.getString(5);
+			show.cinemaName = rs.getString(6);
+			show.SalonName = rs.getString(7);
+			show.movieStartTime = rs.getString(8);
+			ret.add(show);
+		}
+
+		// Close the variable stmt and release all resources bound to it
+		// Any ResultSet associated to the Statement will be automatically
+		// closed too.
+		stmt.close();
+		
+		return ret;
+	}
 }

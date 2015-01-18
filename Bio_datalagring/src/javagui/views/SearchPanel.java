@@ -8,7 +8,9 @@ import javax.swing.JLabel;
 
 import java.awt.Font;
 
+import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
+import javax.swing.JList;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.JTextPane;
@@ -37,17 +39,26 @@ import javax.swing.SpringLayout;
 import ODBC.ODBCHandler;
 import ODBC.dataStructure.CityTable;
 import ODBC.dataStructure.MovieInfo;
+import ODBC.dataStructure.ShowTime;
 
 import java.awt.Insets;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.sql.SQLException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 
 public class SearchPanel extends JPanel {
 
 	ODBCHandler ODBC = new ODBCHandler();
+	JComboBox comboBox = new JComboBox();
 	JComboBox comboBox_1 = new JComboBox();
 	JComboBox comboBox_2 = new JComboBox();
+	JComboBox comboBox_3 = new JComboBox();
+	Boolean theatherIsLatest = null; 
 
 	/**
 	 * Create the panel.
@@ -84,7 +95,7 @@ public class SearchPanel extends JPanel {
 		gbc_lblCity.gridy = 1;
 		add(lblCity, gbc_lblCity);
 
-		JComboBox comboBox = new JComboBox();
+		
 		comboBox.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 
@@ -107,8 +118,7 @@ public class SearchPanel extends JPanel {
 			}
 		});
 
-		comboBox.setModel(new DefaultComboBoxModel(new String[] { "Stockholm",
-				"Malm\u00F6" }));
+		comboBox.setModel(new DefaultComboBoxModel(new String[] {"-"}));
 		try {
 
 			ArrayList<CityTable> cityTable = ODBC.GetCitys();
@@ -137,13 +147,25 @@ public class SearchPanel extends JPanel {
 		gbc_lblTheather.gridy = 2;
 		add(lblTheather, gbc_lblTheather);
 
-		comboBox_1.setModel(new DefaultComboBoxModel(
-				new String[] { "Rigoletto" }));
+		comboBox_1.setModel(new DefaultComboBoxModel(new String[] {"-Select City-"}));
 		comboBox_1.addActionListener(new ActionListener() {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				// TODO Update Date! 
+				JComboBox cb = (JComboBox) e.getSource();
+				String CinemaName = (String) cb.getSelectedItem();				
+				String City= (String) comboBox.getSelectedItem();
+				
+				ArrayList<String> avaibleDays;
+				try {
+					avaibleDays = ODBC.getAvailableDatesAtCinema(CinemaName);
+					comboBox_3.setModel(new DefaultComboBoxModel(avaibleDays.toArray()));
+				} catch (SQLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+
+				theatherIsLatest = true;
 				
 			}
 		});
@@ -170,8 +192,7 @@ public class SearchPanel extends JPanel {
 		gbc_lblMovie.gridy = 2;
 		add(lblMovie, gbc_lblMovie);
 
-		comboBox_2.setModel(new DefaultComboBoxModel(
-				new String[] { "The Hobbit" }));
+		comboBox_2.setModel(new DefaultComboBoxModel(new String[] {"-Select City-"}));
 		comboBox_2.addActionListener(new ActionListener() {
 
 			@Override
@@ -185,13 +206,18 @@ public class SearchPanel extends JPanel {
 					MovieInfoPanel.txtrWhenTonyStark.setText(movie.Description);
 					MovieInfoPanel.lblNewLabel.setText("Lenght: " +movie.Lenght +" min  , Price: " +movie.Price + " :-");
 					
-					//TODO Update Available Dates!
+					
+					String City= (String) comboBox.getSelectedItem();
+					ArrayList<String> avaibleDays = ODBC.getAvailableDatesCityAndMovie( MovieTitle,  City );
+
+					comboBox_3.setModel(new DefaultComboBoxModel(avaibleDays.toArray()));
+				
 					
 				} catch (Exception e1) {
 					e1.printStackTrace();
 				}
 
-				
+				theatherIsLatest = false;
 				
 			}
 		});
@@ -210,9 +236,42 @@ public class SearchPanel extends JPanel {
 		gbc_lblDate.gridy = 3;
 		add(lblDate, gbc_lblDate);
 
-		JComboBox comboBox_3 = new JComboBox();
-		comboBox_3.setModel(new DefaultComboBoxModel(
-				new String[] { "Today 15/1" }));
+		comboBox_3.setModel(new DefaultComboBoxModel(new String[]{"-Select Above-"}));
+		comboBox_3.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				
+				JComboBox cb = (JComboBox) e.getSource();
+				String Date = (String) cb.getSelectedItem();				
+				if (theatherIsLatest){
+					try {
+						ArrayList<ShowTime> Availebelshows =ODBC.getShows((String)comboBox_1.getSelectedItem(), Date);
+						SearchReslut.model.removeAllElements();
+						
+						for (int i = 0; i < Availebelshows.size(); i++) {
+							
+							SearchReslut.model.addElement(Availebelshows.get(i).movieTitle + ", "+
+									Availebelshows.get(i).movieStartTime + ", " + Availebelshows.get(i).movieLenght + "min, Cinema: "
+									+ Availebelshows.get(i).cinemaName + ", Salon: "+ Availebelshows.get(i).SalonName
+									);
+							
+						}
+						System.out.println("trying");
+					} catch (SQLException e1) {						e1.printStackTrace();		}
+				
+				} else {
+					
+					//ArrayList<ShowTime> Availebelshows = ODBC.getShowss((String)comboBox_1.getSelectedItem(), Date);
+					SearchReslut.model.removeAllElements();
+					
+					
+				}
+				
+			}
+		});
+		
 		GridBagConstraints gbc_comboBox_3 = new GridBagConstraints();
 		gbc_comboBox_3.insets = new Insets(0, 0, 0, 5);
 		gbc_comboBox_3.fill = GridBagConstraints.HORIZONTAL;
