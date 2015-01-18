@@ -202,7 +202,6 @@ public class ODBCHandler {
 		String query;
 		ResultSet rs;
 		PreparedStatement stmt;
-		String markeparam;
 
 		// Set the SQL statement into the query variable
 		query = "SELECT Stad.StadID FROM Stad WHERE Stad.Namn=?";

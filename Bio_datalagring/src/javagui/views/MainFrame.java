@@ -58,7 +58,7 @@ public class MainFrame extends JFrame {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				CreateCinemaDialog cinema = new CreateCinemaDialog();
+				new CreateCinemaDialog();
 			}
 		});
 		
