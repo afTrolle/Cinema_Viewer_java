@@ -44,6 +44,7 @@ public class SearchReslut extends JPanel {
 	final int windowHeight = 614;
 
 	static JList showsList = new JList();
+	static MovieInfoPanel moviesPanel = new MovieInfoPanel();
 	public static DefaultListModel model = new DefaultListModel();
 
 	/**
@@ -73,7 +74,7 @@ public class SearchReslut extends JPanel {
 				searchborder));
 		add(movieFinder, gbc_movieFinder);
 
-		MovieInfoPanel moviesPanel = new MovieInfoPanel();
+		moviesPanel.setVisible(false);
 		GridBagConstraints gbc_moviesPanel = new GridBagConstraints();
 		gbc_moviesPanel.insets = new Insets(0, 0, 5, 0);
 		gbc_moviesPanel.fill = GridBagConstraints.BOTH;
@@ -106,6 +107,7 @@ public class SearchReslut extends JPanel {
 		add(timeandmoviePanel, gbc_timeandmoviePanel);
 
 		showsList.setBackground(null);
+		showsList.setVisible(false);
 		showsList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		showsList.setLayoutOrientation(JList.VERTICAL_WRAP);
 
@@ -134,6 +136,7 @@ public class SearchReslut extends JPanel {
 								+ movie.movieLenght + " min  , Price: "
 								+ movie.moviePrice + " :-");
 
+						moviesPanel.setVisible(true);
 					}
 				}
 			}

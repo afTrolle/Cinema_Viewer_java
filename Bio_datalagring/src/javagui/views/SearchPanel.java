@@ -219,7 +219,8 @@ public class SearchPanel extends JPanel {
 
 					comboBox_3.setModel(new DefaultComboBoxModel(avaibleDays
 							.toArray()));
-
+					
+					SearchReslut.moviesPanel.setVisible(true);
 				} catch (Exception e1) {
 					e1.printStackTrace();
 				}
@@ -273,6 +274,7 @@ public class SearchPanel extends JPanel {
 
 						}
 						System.out.println("trying");
+						SearchReslut.showsList.setVisible(true);
 					} catch (SQLException e1) {
 						e1.printStackTrace();
 					}
@@ -297,7 +299,7 @@ public class SearchPanel extends JPanel {
 									+ Availebelshows.get(i).cinemaName
 									+ ", Salon: "
 									+ Availebelshows.get(i).SalonName);
-						
+							SearchReslut.showsList.setVisible(true);
 						}
 					} catch (SQLException e1) {
 						e1.printStackTrace();
