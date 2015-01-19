@@ -134,11 +134,21 @@ public class SearchFilterPanel extends JPanel {
 				JComboBox cb = (JComboBox) e.getSource();
 				String CinemaName = (String) cb.getSelectedItem();
 
-				ArrayList<String> avaibleDays;
+				//this checks that user has selected a city.
+				if (CinemaName.equals("-Select City-")) {
+					return;
+				}
+				
+				clearBrowserPanel();
 				try {
-					avaibleDays = ODBC.getAvailableDatesAtCinema(CinemaName);
+					ArrayList<String> avaibleDays = ODBC.getAvailableDatesAtCinema(CinemaName);
 					dateBox.setModel(new DefaultComboBoxModel(avaibleDays
 							.toArray()));
+					
+					if (avaibleDays.isEmpty()) {
+						dateBox.setModel(new DefaultComboBoxModel( new String[] {"-Not available-"}));
+					}
+					
 				} catch (SQLException e1) {
 					e1.printStackTrace();
 				}
@@ -167,6 +177,11 @@ public class SearchFilterPanel extends JPanel {
 				JComboBox cb = (JComboBox) e.getSource();
 				String MovieTitle = (String) cb.getSelectedItem();
 
+				//check that user has selected a city with a valid movie selection!
+				if (MovieTitle.equals("-Not available-") || MovieTitle.equals("-Select City-") ) {
+					return;
+				}
+				clearBrowserPanel();
 				MovieInfoPanel.lblMovieTitel.setText(MovieTitle);
 				try {
 					MovieInfo movie = ODBC.getMovieInfo(MovieTitle);
@@ -236,6 +251,11 @@ public class SearchFilterPanel extends JPanel {
 		add(dateBox, gbc_comboBox_3);
 
 	}
+	
+	// Clears the browser Panel so it looks nice and clean!
+	public void clearBrowserPanel(){
+		CinemaBrowserPanel.model.clear();
+	}
 
 	// it updates the list of available shows that are done. 
 	public void updateBrowserPanel() {
@@ -278,14 +298,25 @@ public class SearchFilterPanel extends JPanel {
 				JComboBox cb = (JComboBox) e.getSource();
 				String CityName = (String) cb.getSelectedItem();
 				try {
-
+					
 					ArrayList<String> res = ODBC.getCinemasInCity(CityName);
 					cinemaBox.setModel(new DefaultComboBoxModel(res.toArray()));
 
 					ArrayList<String> moviesInTown = ODBC
 							.getMoviesInCity(CityName);
-					movieBox.setModel(new DefaultComboBoxModel(moviesInTown
-							.toArray()));
+					
+					//if there aren't any availble movies in that town.
+					if (moviesInTown.isEmpty()){
+						movieBox.setModel( new DefaultComboBoxModel(new String[] {"-Not available-"}));
+					} else {
+						movieBox.setModel(new DefaultComboBoxModel(moviesInTown
+								.toArray()));
+					}
+					
+					clearBrowserPanel();
+					// Reset The Date Box
+					dateBox.setModel(new DefaultComboBoxModel(
+							new String[] { "-Select Above-" }));
 				} catch (Exception e1) {
 				}
 

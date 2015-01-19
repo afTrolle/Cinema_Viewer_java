@@ -1,17 +1,15 @@
 package javagui.views;
 
+import java.awt.BorderLayout;
+import java.util.ArrayList;
+
 import javax.swing.JPanel;
 import javax.swing.JTree;
-import javax.swing.JScrollPane;
 import javax.swing.tree.DefaultMutableTreeNode;
-import javax.swing.BoxLayout;
 
 import ODBC.ODBCHandler;
 import ODBC.dataStructure.CinemaTable;
 import ODBC.dataStructure.CityTable;
-
-import java.awt.BorderLayout;
-import java.util.ArrayList;
 
 @SuppressWarnings("serial")
 public class CitysPanel extends JPanel {
@@ -37,9 +35,7 @@ public class CitysPanel extends JPanel {
 					 Cinema.add(addres);
 					 
 				}
-				 
 				 root.add(City);
-				 
 			}
 
 			
