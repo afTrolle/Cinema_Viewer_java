@@ -446,7 +446,7 @@ public class ODBCHandler {
 
 	}
 
-	public ArrayList<String> getAvailableDatesAtCinema(String cinemaName) throws SQLException {
+	public ArrayList<String> getAvailableDatesAtCinema(String cinemaName,String CityName) throws SQLException {
 		
 		String query;
 		ResultSet rs;
@@ -458,7 +458,7 @@ public class ODBCHandler {
 				+ "INNER JOIN Salong ON Salong.SalongsID=Föreställning.Salong)"
 				+ "INNER JOIN Biograf ON Biograf.BiografID=Salong.Biograf)"
 				+ "INNER JOIN Stad ON Stad.StadID=Biograf.Stad"
-				+ " WHERE Biograf.Namn=? AND   (0 >  DATEDIFF('d',Föreställning.Starttid,Now())) ";
+				+ " WHERE Biograf.Namn=? AND Stad.Namn=?  AND 0 >  DATEDIFF('d',Föreställning.Starttid,Now()) ";
 
 		// Create a statement associated to the connection and the query.
 		// The new statement is placed in the variable stmt.
@@ -469,6 +469,7 @@ public class ODBCHandler {
 		// manager
 		// through the variables stmt and con.
 		stmt.setString(1, cinemaName);
+		stmt.setString(2, CityName);
 		// Execute the SQL statement that is prepared in the variable stmt
 		// and store the result in the variable rs.
 		rs = stmt.executeQuery();
@@ -487,7 +488,7 @@ public class ODBCHandler {
 		return ret;
 	}
 
-	public ArrayList<ShowTime> getShows(String Cinema, String date) throws SQLException {
+	public ArrayList<ShowTime> getShows2(String Cinema, String date, String City) throws SQLException {
 		
 		String query;
 		ResultSet rs;
@@ -503,7 +504,7 @@ public class ODBCHandler {
 				+ "INNER JOIN Salong ON Salong.SalongsID=Föreställning.Salong) "
 				+ "INNER JOIN Biograf ON Biograf.BiografID=Salong.Biograf) "
 				+ "INNER JOIN Stad ON Stad.StadID=Biograf.Stad "
-				+ "WHERE (0>DATEDIFF('d',Föreställning.Starttid,Now())))"
+				+ "WHERE Stad.Namn=? AND (0>DATEDIFF('d',Föreställning.Starttid,Now())))"
 				+ "WHERE Check=? AND Biograf.Namn=?" ;
 
 		// Create a statement associated to the connection and the query.
@@ -514,8 +515,9 @@ public class ODBCHandler {
 		// The value of the variable markeparam will be sent to the database
 		// manager
 		// through the variables stmt and con.
-		stmt.setString(2, Cinema);
-		stmt.setString(1, date);
+		stmt.setString(1, City);
+		stmt.setString(3, Cinema);
+		stmt.setString(2, date);
 		// Execute the SQL statement that is prepared in the variable stmt
 		// and store the result in the variable rs.
 		rs = stmt.executeQuery();

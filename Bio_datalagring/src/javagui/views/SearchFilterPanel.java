@@ -141,7 +141,9 @@ public class SearchFilterPanel extends JPanel {
 				
 				clearBrowserPanel();
 				try {
-					ArrayList<String> avaibleDays = ODBC.getAvailableDatesAtCinema(CinemaName);
+					String City = (String) cityBox.getSelectedItem();
+					System.out.println(City);
+					ArrayList<String> avaibleDays = ODBC.getAvailableDatesAtCinema(CinemaName,City);
 					dateBox.setModel(new DefaultComboBoxModel(avaibleDays
 							.toArray()));
 					
@@ -227,8 +229,9 @@ public class SearchFilterPanel extends JPanel {
 
 				try {
 					if (theatherIsLatest) {
-						Availebelshows = ODBC.getShows(
-								(String) cinemaBox.getSelectedItem(), Date);
+						System.out.println((String) cityBox.getSelectedItem());
+						Availebelshows = ODBC.getShows2(
+								(String) cinemaBox.getSelectedItem(), Date, (String) cityBox.getSelectedItem());
 					} else {
 						Availebelshows = ODBC.getShows(
 								(String) cityBox.getSelectedItem(), Date,
